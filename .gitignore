@@ -1,0 +1,69 @@
+# Environment files
+config/.env.php
+.env
+.env.php
+.env.local
+
+# Composer
+/vendor/
+composer.lock
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*.sublime-*
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs
+logs/*.log
+logs/
+*.log
+
+# Backups
+backups/*.zip
+backups/
+*.backup
+
+# Temporary files
+*.tmp
+*.temp
+*.cache
+tmp/
+temp/
+
+# Update files
+update_*.zip
+LAST_UPDATE
+
+# Install flag
+install/.installed
+
+# User uploaded files
+uploads/
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+
+# Runtime files
+*.pid
+*.sock
+
+# NPM
+node_modules/
+package-lock.json
+
+# Cache
+cache/
+
+# Test files
+test_*.php
+phpunit.xml
+.phpunit.result.cache

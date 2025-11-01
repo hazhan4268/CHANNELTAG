@@ -1,119 +1,315 @@
-# ربات تلگرام با PHP 🤖
+# Telegram Channel Bot 🤖
 
-[![PHP Version](https://img.shields.io/badge/PHP-%3E%3D7.4-blue.svg)](https://php.net/)
+[![PHP Version](https://img.shields.io/badge/PHP-%3E%3D8.1-blue.svg)](https://php.net/)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+[![Version](https://img.shields.io/badge/version-2.1.0-brightgreen.svg)](https://github.com/hazhan4268/CHANNELTAG)
 
-یک ربات تلگرام ساده و قابل توسعه با زبان PHP برای مدیریت کانال.
+A production-grade Telegram bot for automatically replying to channel posts with templated comments. Designed for cPanel shared hosting with PHP 8.1+, MySQL (PDO), and webhook-based architecture.
 
-A simple and extensible Telegram bot with PHP for channel management.
+## ✨ Features
 
-## ✨ ویژگی‌ها
+- ✅ **Webhook-based** - Efficient webhook handling for channel posts
+- ✅ **Modern Admin Panel** - Complete redesigned password-protected admin interface
+- ✅ **Auto-Update System** - Automatic updates from GitHub repository
+- ✅ **Template Engine** - Flexible template system with variables
+- ✅ **Channel Management** - Allowlist channels with per-channel templates
+- ✅ **Tag/ID Management** - CRUD interface for tags and IDs
+- ✅ **Rate Limiting** - Prevents duplicates and manages rate limits
+- ✅ **Retry Logic** - Automatic retry on API errors (429/5xx)
+- ✅ **Security** - Secret token verification, CSRF protection, password hashing
+- ✅ **Health Monitoring** - Health check page with system status
+- ✅ **Installation Wizard** - Step-by-step installer
+- ✅ **Backup & Restore** - Automatic backup before updates
+- ✅ **Internationalization** - Support for EN/FA locales
 
-- ✅ پاسخ به دستورات `/start`, `/help`, `/about`
-- ✅ پاسخ به پیام‌های متنی
-- ✅ ساختار کد تمیز و قابل توسعه
-- ✅ پشتیبانی از فایل `.env` برای تنظیمات
-- ✅ مدیریت کانال تلگرام
+## 🆕 New in Version 2.1.0
 
-## 📋 پیش‌نیازها
+- 🎨 **Redesigned Admin Panel** - Modern, responsive UI with sidebar navigation
+- 🔄 **Auto-Update System** - One-click updates from GitHub
+- 📦 **Backup Management** - Automatic backups with restore functionality
+- 📊 **Enhanced Dashboard** - Better statistics and system info
+- ⚡ **Quick Actions** - Fast access to common tasks
+- 🔗 **GitHub Integration** - Direct connection to main repository
+- 📱 **Mobile Responsive** - Works perfectly on mobile devices
 
-- PHP 7.4 یا بالاتر
-- cURL extension
-- Composer (اختیاری)
-- یک ربات تلگرام از [BotFather](https://t.me/BotFather)
+## 📋 Requirements
 
-## 🚀 نصب و راه‌اندازی
+- PHP 8.1 or higher
+- MySQL 5.7+ / MariaDB 10.2+
+- cPanel shared hosting (or any PHP hosting)
+- PHP Extensions: PDO, cURL, OpenSSL, JSON, mbstring
+- Telegram Bot Token (from @BotFather)
 
-### 1. کلون کردن ریپازیتوری
+## 🚀 Installation
 
-```bash
-git clone https://github.com/YOUR_USERNAME/telegram-bot-php.git
-cd telegram-bot-php
+### Step 1: Upload Files
+
+Upload all files to your cPanel `public_html` directory (or your document root).
+
+```
+/public_html/
+├── public/
+├── src/
+├── sql/
+├── templates/
+├── config/
+├── logs/
+└── install/
 ```
 
-### 2. دریافت توکن ربات
+### Step 2: Create MySQL Database
 
-- به [@BotFather](https://t.me/BotFather) در تلگرام بروید
-- دستور `/newbot` را ارسال کنید
-- نام و username ربات را تعیین کنید
-- توکن دریافتی را کپی کنید
+1. Go to cPanel → MySQL Databases
+2. Create a new database (e.g., `telegram_bot`)
+3. Create a database user and assign full privileges
+4. Note down: Database name, Username, Password
 
-### 3. تنظیم توکن
+### Step 3: Run Installer
 
-**روش 1: استفاده از فایل `.env` (پیشنهادی)**
+1. Visit `https://yourdomain.com/install/`
+2. Follow the installation wizard:
+   - **Step 1**: System check (PHP extensions)
+   - **Step 2**: Database configuration
+   - **Step 3**: Create admin user
+   - **Step 4**: Bot configuration (token, base URL)
+   - **Step 5**: Complete - Webhook URL displayed
 
-یک فایل `.env` در ریشه پروژه ایجاد کنید:
+### Step 4: Set Webhook
 
-```bash
-BOT_TOKEN=your_bot_token_here
+Click the "Set Webhook" button in the installer or manually call:
+
+```
+POST https://yourdomain.com/set_webhook.php
 ```
 
-**روش 2: تنظیم مستقیم در کد**
+### Step 5: Configure Bot in Channel
 
-توکن را مستقیماً در فایل `bot.php` وارد کنید (خط 148).
+1. Add your bot as **administrator** to your Telegram channel
+2. Make sure the bot has permission to send messages
+3. Go to Admin Panel → Channels
+4. Add channel (Chat ID or username)
 
-### 4. اجرای ربات
+## 📖 Usage
 
-```bash
-php bot.php
+### Admin Panel
+
+Access: `https://yourdomain.com/admin/`
+
+**Login**: Use the admin credentials created during installation.
+
+**Sections**:
+- **Dashboard**: Statistics and recent posts
+- **Settings**: Global toggle, parse mode, locale, separators
+- **Channels**: Manage allowed channels (add/remove/enable/disable)
+- **Tags**: Manage tags and IDs (CRUD)
+- **Template**: Edit auto-reply template
+- **Health**: System status and webhook info
+
+### Template Variables
+
+Available variables in templates:
+
+- `{tags}` - All enabled tags (joined by tag separator)
+- `{ids}` - All enabled IDs (joined by ID separator)
+- `{channel_username}` - Channel username (e.g., @channel)
+- `{channel_id}` - Channel chat ID
+- `{message_id}` - Post message ID
+- `{date}` - Post date/time
+- `{post_type}` - Type: text, photo, video, document, etc.
+- `{permalink}` - Direct link to post (if username available)
+- `{custom1}`, `{custom2}`, `{custom3}` - Custom placeholders
+
+**Example Template**:
+```
+🔖 {tags}
+🆔 {ids}
+
+Post: {message_id} · {date}
+{permalink}
 ```
 
-## 💻 توسعه ربات
+### Adding Channels
 
-می‌توانید با ویرایش متد `processMessage()` در کلاس `TelegramBot`، دستورات و پاسخ‌های جدید اضافه کنید.
+1. Go to Admin Panel → Channels
+2. Click "Add New Channel"
+3. Enter:
+   - **Chat ID**: Channel chat ID (e.g., `-1001234567890`)
+   - **Username**: Optional (e.g., `@channel_username`)
+   - **Enabled**: Toggle on/off
+   - **Template**: Optional per-channel template (leave empty for default)
 
-### مثال اضافه کردن دستور جدید:
+**Finding Chat ID**:
+- Use @userinfobot in your channel
+- Or check channel post JSON in webhook logs
+
+### Managing Tags & IDs
+
+1. Go to Admin Panel → Tags
+2. Add new tag or ID:
+   - **Type**: Tag or ID
+   - **Value**: The actual tag/ID value
+   - **Sort**: Sort order (0 = first)
+   - **Enabled**: Toggle on/off
+
+Tags and IDs are rendered in templates using `{tags}` and `{ids}` variables.
+
+### Webhook Security
+
+The webhook endpoint is protected by:
+- **Secret Token**: Set during installation, verified on each request
+- **X-Telegram-Bot-Api-Secret-Token** header verification
+- **POST-only**: GET requests are blocked
+
+Webhook URL format: `https://yourdomain.com/webhook/{RANDOM_SLUG}`
+
+## 🔧 Configuration
+
+### Environment File (`config/.env.php`)
+
+Generated during installation. Contains:
 
 ```php
-case '/mycommand':
-    $response = "پاسخ دستور جدید شما";
-    $this->sendMessage($chatId, $response);
-    break;
+return [
+    'DB_HOST' => 'localhost',
+    'DB_NAME' => 'telegram_bot',
+    'DB_USER' => 'db_user',
+    'DB_PASS' => 'db_password',
+    
+    'BOT_TOKEN' => '123456:ABC-DEF...',
+    'WEBHOOK_SLUG' => 'random32chars',
+    'SECRET_TOKEN' => 'random64chars',
+    'BASE_URL' => 'https://yourdomain.com',
+    
+    'PARSE_MODE' => 'MarkdownV2', // or 'HTML'
+    'LOCALE' => 'fa', // 'en' or 'fa'
+    'GLOBAL_ON' => true,
+];
 ```
 
-## 📜 دستورات موجود
+## 🛡️ Security Features
 
-- `/start` - شروع ربات و نمایش راهنما
-- `/help` - راهنمای استفاده
-- `/about` - اطلاعات درباره ربات
+- **Password Hashing**: Uses PHP `password_hash()` (bcrypt)
+- **CSRF Protection**: All admin forms use CSRF tokens
+- **SQL Injection Prevention**: All queries use prepared statements
+- **XSS Prevention**: All output is escaped with `htmlspecialchars()`
+- **Secret Token**: Webhook endpoint requires secret token header
+- **Session Security**: HTTP-only cookies, secure flag on HTTPS
 
-## 📝 ساختار پروژه
+## 📊 Database Schema
+
+Tables:
+- `settings` - Bot configuration (key-value)
+- `channels` - Allowed channels list
+- `tags` - Tags and IDs for templates
+- `posts` - Post history (idempotency tracking)
+- `admins` - Admin users
+- `install_flag` - Installation status
+
+See `/sql/schema.sql` for full schema.
+
+## 🐛 Troubleshooting
+
+### Bot Not Replying
+
+1. **Check Global Toggle**: Admin Panel → Settings → Global Toggle
+2. **Check Channel**: Ensure channel is added and enabled
+3. **Check Bot Permissions**: Bot must be admin in channel
+4. **Check Webhook**: Admin Panel → Health → Webhook status
+5. **Check Logs**: `/logs/` directory for error messages
+
+### Webhook Errors
+
+- **401 Unauthorized**: Check `SECRET_TOKEN` in `.env.php`
+- **404 Not Found**: Check webhook URL and slug
+- **403 Forbidden**: Bot may not be admin in channel
+- **429 Rate Limit**: Too many requests; wait and retry
+
+### Database Errors
+
+- Check database credentials in `.env.php`
+- Ensure database user has CREATE, INSERT, UPDATE, DELETE privileges
+- Check `/logs/` for detailed error messages
+
+### cPanel Issues
+
+- Ensure `public/` is your document root
+- Check `.htaccess` is enabled (mod_rewrite)
+- Verify PHP version is 8.1+
+- Check file permissions: `logs/` must be writable (755)
+
+## 📁 File Structure
 
 ```
-telegram-bot-php/
-├── bot.php           # فایل اصلی ربات
-├── composer.json     # فایل وابستگی‌های Composer
-├── .gitignore       # فایل‌های نادیده‌گرفته شده در Git
-├── LICENSE          # مجوز پروژه
-└── README.md        # این فایل
+/
+├── public/              # Public web root
+│   ├── index.php        # Webhook entry point
+│   ├── set_webhook.php  # Webhook setup helper
+│   ├── .htaccess        # Security & routing
+│   └── admin/           # Admin panel entry points
+├── src/
+│   ├── Config.php       # Configuration loader
+│   ├── Bootstrap.php    # Application bootstrap
+│   ├── Router.php       # Request routing
+│   ├── Logger.php       # Logging service
+│   ├── Controllers/     # MVC controllers
+│   ├── Services/        # Business logic
+│   └── Repositories/    # Data access layer
+├── templates/           # Admin panel templates
+├── sql/                 # Database schema
+│   ├── schema.sql       # Table definitions
+│   └── seed.sql         # Initial data
+├── config/              # Configuration files
+│   ├── .env.example.php # Example config
+│   └── .env.php         # Actual config (generated)
+├── install/             # Installation wizard
+├── logs/                # Application logs
+├── composer.json        # PHP dependencies
+└── README.md            # This file
 ```
 
-## 🤝 مشارکت
+## 🚀 Production Deployment
 
-مشارکت شما خوش‌آمد است! لطفاً:
+### Recommended Settings
 
-1. این ریپازیتوری را Fork کنید
-2. یک شاخه جدید ایجاد کنید (`git checkout -b feature/AmazingFeature`)
-3. تغییرات خود را commit کنید (`git commit -m 'Add some AmazingFeature'`)
-4. به شاخه push کنید (`git push origin feature/AmazingFeature`)
-5. یک Pull Request باز کنید
+1. **Remove Installer**: Delete or protect `/install/` directory
+2. **Set Permissions**: 
+   - `logs/` → 755 (writable)
+   - `config/.env.php` → 600 (read-only, secure)
+3. **Enable HTTPS**: Update `.htaccess` to force HTTPS
+4. **Monitor Logs**: Regularly check `/logs/` for errors
+5. **Backup Database**: Regular MySQL backups recommended
 
-## 📄 مجوز
+### Performance
 
-این پروژه تحت مجوز MIT منتشر شده است. برای جزئیات بیشتر فایل [LICENSE](LICENSE) را مطالعه کنید.
+- Webhook-based (no polling overhead)
+- Database connection pooling
+- Prepared statements for SQL efficiency
+- Rate limiting prevents API abuse
 
-## ⚠️ نکات مهم
+## 📄 License
 
-- ربات باید همیشه در حال اجرا باشد (مثلاً روی سرور یا VPS)
-- برای استفاده در production، از supervisor یا systemd برای مدیریت ربات استفاده کنید
-- از webhook به جای polling برای بهینه‌سازی استفاده کنید
-- **هرگز توکن ربات را در کد commit نکنید!** از فایل `.env` استفاده کنید
+MIT License - See [LICENSE](LICENSE) file for details.
 
-## 💬 پشتیبانی
+## 🤝 Contributing
 
-برای سوالات و مشکلات، می‌توانید issue ایجاد کنید.
+Contributions welcome! Please:
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Submit a pull request
 
-## 🙏 تشکر
+## 💬 Support
 
-از استفاده از این ربات متشکرم!
+For issues and questions:
+- Create an issue on GitHub
+- Check `/admin/health.php` for system status
+- Review `/logs/` for error details
 
+## 🙏 Acknowledgments
+
+Built with ❤️ for the Telegram community.
+
+---
+
+**Version**: 2.0  
+**Last Updated**: 2024

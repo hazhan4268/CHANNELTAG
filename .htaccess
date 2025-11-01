@@ -1,0 +1,14 @@
+# Root .htaccess - Redirect all to public folder
+RewriteEngine On
+
+# Redirect everything to public folder except if already in public
+RewriteCond %{REQUEST_URI} !^/public/
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ /public/$1 [L]
+
+# Security - protect config and logs
+<FilesMatch "\.(env|log|sql|md)$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
